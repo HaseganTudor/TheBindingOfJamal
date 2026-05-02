@@ -13,8 +13,8 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 public class Main {
     private long window;
-    private int width = 800;
-    private int height = 600;
+    private int width = 1400;
+    private int height = 1000;
     private String title = "titlu";
 
     private void init(){
@@ -37,7 +37,7 @@ public class Main {
     private void loop(){
         while(!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT);
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
             glfwPollEvents();
             glfwSwapBuffers(window);
