@@ -1,3 +1,4 @@
+import Render.Shader;
 import Render.VertexArray;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -48,15 +49,18 @@ public class Main {
                 0,2,3
         };
 
+        Shader shader = new Shader("res/shaders/vert.glsl", "res/shaders/frag.glsl");
         VertexArray va = new VertexArray(vertices, indices);
 
         while(!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT);
             glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
+            shader.bind();
             va.bind();
             va.render();
             va.unbind();
+            shader.unbind();
 
             glfwPollEvents();
             glfwSwapBuffers(window);

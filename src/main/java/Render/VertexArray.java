@@ -26,8 +26,8 @@ public class VertexArray {
         IntBuffer ind = BufferUtils.createIntBuffer(indices);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, ind, GL_STATIC_DRAW);
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * Float.BYTES, 0);
+        glEnableVertexAttribArray(Shader.VERTICES_SLOT);
+        glVertexAttribPointer(Shader.VERTICES_SLOT, 3, GL_FLOAT, false, 3 * Float.BYTES, 0);
 
         BufferUtils.free(vert);
         BufferUtils.free(ind);
