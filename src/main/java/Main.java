@@ -1,3 +1,4 @@
+import Render.VertexArray;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -35,9 +36,27 @@ public class Main {
     }
 
     private void loop(){
+        float[] vertices = {
+                -0.5f, -0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                0.5f, 0.5f, 0.0f,
+                -0.5f, 0.5f, 0.0f,
+        };
+
+        int[] indices = {
+                0,1,2,
+                0,2,3
+        };
+
+        VertexArray va = new VertexArray(vertices, indices);
+
         while(!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT);
             glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
+            va.bind();
+            va.render();
+            va.unbind();
 
             glfwPollEvents();
             glfwSwapBuffers(window);
