@@ -1,6 +1,8 @@
 package Render;
 
+import Utils.BufferUtils;
 import Utils.FileUtils;
+import org.joml.Matrix4f;
 
 import static org.lwjgl.opengl.GL46C.*;
 
@@ -34,5 +36,11 @@ public class Shader {
 
     public void unbind(){
         glUseProgram(0);
+    }
+
+    public void setUniformMat4f(String name, Matrix4f matrix) {
+        int location = glGetUniformLocation(program, name);
+        float[] matrix_ = matrix.get(new float[16]);
+        glUniformMatrix4fv(location, false, BufferUtils.createFloatBuffer(matrix_));
     }
 }

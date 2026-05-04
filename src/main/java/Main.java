@@ -1,16 +1,12 @@
+import Game.GameObject;
+import Game.Player;
+import Game.Renderer;
+import Render.Camera;
 import Render.Shader;
-import Render.VertexArray;
-import org.lwjgl.*;
-import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.system.*;
 
-import java.nio.*;
-
-import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class Main {
@@ -37,30 +33,18 @@ public class Main {
     }
 
     private void loop(){
-        float[] vertices = {
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.5f, 0.5f, 0.0f,
-                -0.5f, 0.5f, 0.0f,
-        };
 
-        int[] indices = {
-                0,1,2,
-                0,2,3
-        };
+        Renderer renderer = new Renderer(width, height);
+        GameObject object = new GameObject();
+        Player p = new Player();
+        p.draw();
 
-        Shader shader = new Shader("res/shaders/vert.glsl", "res/shaders/frag.glsl");
-        VertexArray va = new VertexArray(vertices, indices);
 
         while(!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT);
             glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-            shader.bind();
-            va.bind();
-            va.render();
-            va.unbind();
-            shader.unbind();
+            renderer.draw(object);
 
             glfwPollEvents();
             glfwSwapBuffers(window);
