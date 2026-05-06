@@ -37,14 +37,19 @@ public class Main {
         Renderer renderer = new Renderer(width, height);
         GameObject object = new GameObject();
         Player p = new Player();
-        p.draw();
 
+        double lastFrame = glfwGetTime();
 
         while(!glfwWindowShouldClose(window)) {
             glClear(GL_COLOR_BUFFER_BIT);
             glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
-            renderer.draw(object);
+            double currentFrame = glfwGetTime();
+            double delta = currentFrame - lastFrame;
+            lastFrame = currentFrame;
+
+            renderer.draw(p);
+            p.update(window,delta);
 
             glfwPollEvents();
             glfwSwapBuffers(window);
