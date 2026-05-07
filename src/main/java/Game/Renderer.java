@@ -2,6 +2,7 @@ package Game;
 
 import Render.Camera;
 import Render.Shader;
+import org.joml.Vector3f;
 
 public class Renderer {
     private static Shader shader;
@@ -16,6 +17,8 @@ public class Renderer {
         shader.bind();
 
         shader.setUniformMat4f("model",object.getModelMatrix());
+        shader.setColor(object.color.x, object.color.y, object.color.z, 1.0f);
         object.draw();
     }
+
 }

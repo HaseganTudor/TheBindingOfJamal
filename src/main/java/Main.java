@@ -1,13 +1,13 @@
 import Game.GameObject;
 import Game.Player;
 import Game.Renderer;
-import Render.Camera;
-import Render.Shader;
-import org.lwjgl.opengl.*;
+import Physics.BoxCollider;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
     private long window;
@@ -15,11 +15,12 @@ public class Main {
     private int height = 1000;
     private String title = "titlu";
 
-    private void init(){
-        if(!glfwInit()) {
+    private void init() {
+        if (!glfwInit()) {
             System.out.println("nu s-a putut initializa GLFW");
             return;
         }
+
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -32,15 +33,23 @@ public class Main {
         GL.createCapabilities();
     }
 
-    private void loop(){
+    private void loop() {
 
         Renderer renderer = new Renderer(width, height);
-        GameObject object = new GameObject();
+
         Player p = new Player();
+
+        GameObject cube = new GameObject();
+        BoxCollider.addCollider(cube);
+
+        cube.setColor(1, 0, 0);
+        cube.position = new Vector3f(0, 200, 0);
+        cube.update();
 
         double lastFrame = glfwGetTime();
 
-        while(!glfwWindowShouldClose(window)) {
+        while (!glfwWindowShouldClose(window)) {
+
             glClear(GL_COLOR_BUFFER_BIT);
             glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
@@ -48,8 +57,17 @@ public class Main {
             double delta = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
+            for (GameObject obj : BoxCollider.colliders) {
+                if (obj == p) continue;
+
+                p.position.add(BoxCollider.getResolution(p, obj));
+            }
+
+
+            p.update(window, delta);
+
             renderer.draw(p);
-            p.update(window,delta);
+            renderer.draw(cube);
 
             glfwPollEvents();
             glfwSwapBuffers(window);
@@ -58,7 +76,7 @@ public class Main {
         glfwTerminate();
     }
 
-    private void run(){
+    private void run() {
         init();
         loop();
     }

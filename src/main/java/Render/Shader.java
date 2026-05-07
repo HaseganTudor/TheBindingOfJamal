@@ -43,4 +43,8 @@ public class Shader {
         float[] matrix_ = matrix.get(new float[16]);
         glUniformMatrix4fv(location, false, BufferUtils.createFloatBuffer(matrix_));
     }
+
+    public void setColor(float r, float g, float b, float a){
+        glUniform4f(glGetUniformLocation(program, "color"), r, g, b, a);
+    }
 }

@@ -1,13 +1,19 @@
 package Game;
 
+import Physics.BoxCollider;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Player extends GameObject {
-    private float walkSpeed = 400f;
-    private Vector3f position = new Vector3f(0.0f, 0.0f, -1.0f);
+    private float walkSpeed = 600f;
+
+    public Player() {
+        super();
+        position = new Vector3f(0,-200f,-1f);
+        BoxCollider.addCollider(this);
+    }
 
     public void update(long window, double delta){
         PlayerMovement(window,delta);
