@@ -5,10 +5,13 @@ import Render.VertexArray;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+
 public class GameObject{
     public Matrix4f modelMatrix;
     private VertexArray vertexArray;
     public Vector3f position = new Vector3f(0.0f, 0.0f, -1.0f);
+    public  float sizeX = 100f;
+    public  float sizeY = 100f;
     public float size = 100f;
     public boolean isSolid = true;
 
@@ -62,5 +65,32 @@ public class GameObject{
         this.size = size;
     }
 
+    public void setSizeX(float size){
+        this.sizeX = size;
+    }
+    public void setSizeY(float size){
+        this.sizeY = size;
+    }
+
+    public float getSize(){
+        return size;
+    }
+
+    public float getSizeX(){
+        return sizeX;
+    }
+
+    public float getSizeY(){
+        return sizeY;
+    }
+
     public void setSolid(boolean solidState){ isSolid = solidState; }
+
+    public float getHalfSizeX() {
+        return sizeX / 2;
+    }
+
+    public float getHalfSizeY() {
+        return sizeY / 2;
+    }
 }

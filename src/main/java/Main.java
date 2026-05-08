@@ -1,9 +1,14 @@
 import Game.GameObject;
 import Game.Player;
 import Game.Renderer;
+import Game.Room;
 import Physics.BoxCollider;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -11,9 +16,20 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
     private long window;
-    private int width = 1400;
-    private int height = 1000;
+    private static int width = 1500;
+    private static int height = 900;
+    private static float scale = 100f / height;
     private String title = "titlu";
+
+    private ArrayList<GameObject> gameObjectList = new ArrayList<>();
+
+    private static GLFWFramebufferSizeCallback resizeWindow = new GLFWFramebufferSizeCallback(){
+        @Override
+        public void invoke(long window, int width, int height){
+            scale = 100f / (width * 9 / 16);
+            glViewport(0,0,width,width * 9 / 16);
+        }
+    };
 
     private void init() {
         if (!glfwInit()) {
@@ -23,14 +39,16 @@ public class Main {
 
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         window = glfwCreateWindow(width, height, title, NULL, NULL);
 
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
+        glfwSetFramebufferSizeCallback(window, resizeWindow);
 
         GL.createCapabilities();
+
     }
 
     private void loop() {
@@ -39,14 +57,8 @@ public class Main {
 
         Player p = new Player();
 
-        GameObject cube = new GameObject();
-        BoxCollider.addCollider(cube);
-
-        cube.setColor(1, 0, 0);
-        cube.position = new Vector3f(0, 200, 0);
-        cube.update();
-
         double lastFrame = glfwGetTime();
+        Room room = new Room(width, height);
 
         while (!glfwWindowShouldClose(window)) {
 
@@ -57,23 +69,28 @@ public class Main {
             double delta = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
+            renderer.draw(p);
+            p.update(window, delta);
+            room.drawRoom(renderer);
+
             for (GameObject obj : BoxCollider.colliders) {
                 if (obj == p) continue;
 
                 p.position.add(BoxCollider.getResolution(p, obj));
             }
 
-
-            p.update(window, delta);
-
-            renderer.draw(p);
-            renderer.draw(cube);
-
             glfwPollEvents();
             glfwSwapBuffers(window);
         }
 
         glfwTerminate();
+    }
+
+    private void DrawGameObjects(Renderer renderer){
+        for(GameObject obj : gameObjectList){
+            renderer.draw(obj);
+            obj.update();
+        }
     }
 
     private void run() {

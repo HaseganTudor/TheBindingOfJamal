@@ -28,11 +28,14 @@ public class BoxCollider {
         float dx = pb.x - pa.x;
         float dy = pb.y - pa.y;
 
-        float aHalf = a.getHalfSize();
-        float bHalf = b.getHalfSize();
+        float aHalfX = a.getHalfSizeX();
+        float aHalfY = a.getHalfSizeY();
 
-        float px = (aHalf + bHalf) - Math.abs(dx);
-        float py = (aHalf + bHalf) - Math.abs(dy);
+        float bHalfX = b.getHalfSizeX();
+        float bHalfY = b.getHalfSizeY();
+
+        float px = (aHalfX + bHalfX) - Math.abs(dx);
+        float py = (aHalfY + bHalfY) - Math.abs(dy);
 
         if (px <= 0 || py <= 0)
             return new Vector3f(0, 0, 0);

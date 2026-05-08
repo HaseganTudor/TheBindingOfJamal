@@ -8,19 +8,23 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Player extends GameObject {
     private float walkSpeed = 600f;
+    private float sizeX = 80f;
+    private float sizeY = 100f;
 
     public Player() {
         super();
-        position = new Vector3f(0,-200f,-1f);
         BoxCollider.addCollider(this);
     }
 
     public void update(long window, double delta){
+        super.update();
         PlayerMovement(window,delta);
+        setSizeX(sizeX);
+        setSizeY(sizeY);
 
         modelMatrix.identity()
                 .translate(position)
-                .scale(100);
+                .scale(sizeX,sizeY,0.0f);
     }
 
 
