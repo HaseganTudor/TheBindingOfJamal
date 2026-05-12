@@ -1,7 +1,4 @@
-import Game.GameObject;
-import Game.Player;
-import Game.Renderer;
-import Game.Room;
+import Game.*;
 import Physics.BoxCollider;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
@@ -16,9 +13,8 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
     private long window;
-    private static int width = 1500;
-    private static int height = 900;
-    private static float scale = 100f / height;
+    private static int width = 1900;
+    private static int height = 1100;
     private String title = "titlu";
 
     private ArrayList<GameObject> gameObjectList = new ArrayList<>();
@@ -26,7 +22,6 @@ public class Main {
     private static GLFWFramebufferSizeCallback resizeWindow = new GLFWFramebufferSizeCallback(){
         @Override
         public void invoke(long window, int width, int height){
-            scale = 100f / (width * 9 / 16);
             glViewport(0,0,width,width * 9 / 16);
         }
     };
@@ -58,7 +53,8 @@ public class Main {
         Player p = new Player();
 
         double lastFrame = glfwGetTime();
-        Room room = new Room(width, height);
+        Map map =  new Map(p,width, height, 10);
+
 
         while (!glfwWindowShouldClose(window)) {
 
@@ -71,13 +67,9 @@ public class Main {
 
             renderer.draw(p);
             p.update(window, delta);
-            room.drawRoom(renderer);
 
-            for (GameObject obj : BoxCollider.colliders) {
-                if (obj == p) continue;
+            map.drawRoom(renderer);
 
-                p.position.add(BoxCollider.getResolution(p, obj));
-            }
 
             glfwPollEvents();
             glfwSwapBuffers(window);
