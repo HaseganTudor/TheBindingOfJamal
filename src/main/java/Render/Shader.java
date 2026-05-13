@@ -44,6 +44,14 @@ public class Shader {
         glUniformMatrix4fv(location, false, BufferUtils.createFloatBuffer(matrix_));
     }
 
+    public void setSampler(int slot){
+        glUniform1i(glGetUniformLocation(program, "uniTexture"), slot);
+    }
+
+    public void setInt(String name, int value){
+        glUniform1i(glGetUniformLocation(program, name), value);
+    }
+
     public void setColor(float r, float g, float b, float a){
         glUniform4f(glGetUniformLocation(program, "color"), r, g, b, a);
     }

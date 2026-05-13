@@ -26,8 +26,13 @@ public class VertexArray {
         IntBuffer ind = BufferUtils.createIntBuffer(indices);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, ind, GL_STATIC_DRAW);
 
+        int stride = 5 * Float.BYTES;
+
         glEnableVertexAttribArray(Shader.VERTICES_SLOT);
-        glVertexAttribPointer(Shader.VERTICES_SLOT, 3, GL_FLOAT, false, 3 * Float.BYTES, 0);
+        glVertexAttribPointer(Shader.VERTICES_SLOT, 3, GL_FLOAT, false, stride, 0);
+
+        glEnableVertexAttribArray(Shader.TEXTURE_SLOT);
+        glVertexAttribPointer(Shader.TEXTURE_SLOT, 2, GL_FLOAT, false, stride, 3 * Float.BYTES);
 
         BufferUtils.free(vert);
         BufferUtils.free(ind);
@@ -36,7 +41,8 @@ public class VertexArray {
     }
 
     public void render(){
-        glBindVertexArray(vao);
+
+        bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 

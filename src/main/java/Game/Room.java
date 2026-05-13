@@ -83,7 +83,39 @@ public class Room {
 
     private void CreateWalls() {
 
-        for (float i = left; i <= right; i += WallSize) {
+        GameObject cornerLeftUP = new GameObject();
+        GameObject cornerRightUP = new GameObject();
+        GameObject cornerLeftDOWN = new GameObject();
+        GameObject cornerRightDOWW = new GameObject();
+
+        cornerLeftUP.setTexture("res/textures/wall_corner.png");
+        cornerRightUP.setTexture("res/textures/wall_corner.png");
+        cornerLeftDOWN.setTexture("res/textures/wall_corner.png");
+        cornerRightDOWW.setTexture("res/textures/wall_corner.png");
+
+        cornerLeftUP.position.x = left;
+        cornerLeftUP.position.y = top;
+        cornerLeftUP.setRotationZ(-90);
+
+        cornerRightUP.position.x = right;
+        cornerRightUP.position.y = top;
+        cornerRightUP.setRotationZ(180);
+
+        cornerLeftDOWN.position.x = left;
+        cornerLeftDOWN.position.y = bottom;
+        cornerLeftDOWN.setRotationZ(0);
+
+        cornerRightDOWW.position.x = right;
+        cornerRightDOWW.position.y = bottom;
+        cornerRightDOWW.setRotationZ(90);
+
+
+        walls.add(cornerLeftUP);
+        walls.add(cornerRightUP);
+        walls.add(cornerLeftDOWN);
+        walls.add(cornerRightDOWW);
+
+        for (float i = left+WallSize; i < right; i += WallSize) {
 
             GameObject wall = new GameObject();
 
@@ -92,12 +124,13 @@ public class Room {
             if (i == 0 || i == -100 || i == 100)
                 continue;
 
-            wall.setColor(0.52f, 0.37f, 0.26f);
+            wall.setTexture("res/textures/wall.png");
 
             wall.position.x = i;
             wall.position.y = top;
+            wall.setRotationZ(180);
 
-            wall2.setColor(0.52f, 0.37f, 0.26f);
+            wall2.setTexture("res/textures/wall.png");
 
             wall2.position.x = i;
             wall2.position.y = bottom;
@@ -109,7 +142,7 @@ public class Room {
             colliders.add(wall2);
         }
 
-        for (float i = top; i >= bottom; i -= WallSize) {
+        for (float i = top - WallSize; i > bottom; i -= WallSize) {
 
             GameObject wall = new GameObject();
 
@@ -118,15 +151,17 @@ public class Room {
             if (i == 0 || i == -100 || i == 100)
                 continue;
 
-            wall.setColor(0.52f, 0.37f, 0.26f);
+            wall.setTexture("res/textures/wall.png");
 
             wall.position.x = left;
             wall.position.y = i;
+            wall.setRotationZ(-90);
 
-            wall2.setColor(0.52f, 0.37f, 0.26f);
+            wall2.setTexture("res/textures/wall.png");
 
             wall2.position.x = right;
             wall2.position.y = i;
+            wall2.setRotationZ(90);
 
             walls.add(wall);
             walls.add(wall2);
@@ -224,9 +259,11 @@ public class Room {
         GameObject wall2 = new GameObject();
         GameObject wall3 = new GameObject();
 
-        wall1.setColor(0.52f, 0.37f, 0.26f);
-        wall2.setColor(0.52f, 0.37f, 0.26f);
-        wall3.setColor(0.52f, 0.37f, 0.26f);
+
+        wall1.setTexture("res/textures/wall.png");
+        wall2.setTexture("res/textures/wall.png");
+        wall3.setTexture("res/textures/wall.png");
+
 
         switch (dir) {
 
@@ -234,12 +271,15 @@ public class Room {
 
                 wall1.position.x = 0;
                 wall1.position.y = top;
+                wall1.setRotationZ(180);
 
                 wall2.position.x = -100;
                 wall2.position.y = top;
+                wall2.setRotationZ(180);
 
                 wall3.position.x = 100;
                 wall3.position.y = top;
+                wall3.setRotationZ(180);
 
                 break;
 
@@ -247,12 +287,15 @@ public class Room {
 
                 wall1.position.x = 0;
                 wall1.position.y = bottom;
+                wall1.setRotationZ(0);
 
                 wall2.position.x = -100;
                 wall2.position.y = bottom;
+                wall2.setRotationZ(0);
 
                 wall3.position.x = 100;
                 wall3.position.y = bottom;
+                wall3.setRotationZ(0);
 
                 break;
 
@@ -260,12 +303,15 @@ public class Room {
 
                 wall1.position.x = left;
                 wall1.position.y = 0;
+                wall1.setRotationZ(-90);
 
                 wall2.position.x = left;
                 wall2.position.y = -100;
+                wall2.setRotationZ(-90);
 
                 wall3.position.x = left;
                 wall3.position.y = 100;
+                wall3.setRotationZ(-90);
 
                 break;
 
@@ -273,12 +319,15 @@ public class Room {
 
                 wall1.position.x = right;
                 wall1.position.y = 0;
+                wall1.setRotationZ(90);
 
                 wall2.position.x = right;
                 wall2.position.y = -100;
+                wall2.setRotationZ(90);
 
                 wall3.position.x = right;
                 wall3.position.y = 100;
+                wall3.setRotationZ(90);
 
                 break;
         }

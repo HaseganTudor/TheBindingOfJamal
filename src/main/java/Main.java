@@ -51,15 +51,16 @@ public class Main {
         Renderer renderer = new Renderer(width, height);
 
         Player p = new Player();
+        p.setColor(1, 1, 1);
+
 
         double lastFrame = glfwGetTime();
         Map map =  new Map(p,width, height, 10);
 
-
+        glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         while (!glfwWindowShouldClose(window)) {
 
             glClear(GL_COLOR_BUFFER_BIT);
-            glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
             double currentFrame = glfwGetTime();
             double delta = currentFrame - lastFrame;
@@ -91,6 +92,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
+
         new Main().run();
     }
 }

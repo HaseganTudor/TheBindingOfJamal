@@ -12,12 +12,10 @@ public class Player extends GameObject {
     private float sizeY = 100f;
 
     public Player() {
-        super();
         BoxCollider.addCollider(this);
     }
 
     public void update(long window, double delta){
-        super.update();
         PlayerMovement(window,delta);
         setSizeX(sizeX);
         setSizeY(sizeY);
