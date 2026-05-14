@@ -11,7 +11,12 @@ import static org.lwjgl.opengl.GL30C.glGenerateMipmap;
 
 public class Texture {
     private int ID;
+    private static HashMap<String, Integer> cache = new HashMap<>();
     public int loadTexture(String path){
+        if(cache.containsKey(path)){
+            ID = cache.get(path);
+            return ID;
+        }
         int width, height;
         ByteBuffer img;
         try(MemoryStack stack = MemoryStack.stackPush()){

@@ -7,10 +7,10 @@ public class Camera {
     private Matrix4f viewMatrix;
     private Matrix4f projectionMatrix;
     private Matrix4f modelMatrix;
-    float left;
-    float right;
-    float top;
-    float bottom;
+    public static float left;
+    public static float right;
+    public static float top;
+    public static float bottom;
     Shader shader;
 
     public Camera(int width, int height, Shader shader){

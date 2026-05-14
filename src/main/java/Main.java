@@ -13,8 +13,8 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
     private long window;
-    private static int width = 1900;
-    private static int height = 1100;
+    private static int width = 1650;
+    private static int height = 1050;
     private String title = "titlu";
 
     private ArrayList<GameObject> gameObjectList = new ArrayList<>();
@@ -53,9 +53,11 @@ public class Main {
         Player p = new Player();
         p.setColor(1, 1, 1);
 
-
         double lastFrame = glfwGetTime();
-        Map map =  new Map(p,width, height, 10);
+        Map map =  new Map(p,width, height, 10, renderer);
+        Vector3f currentPos = p.position;
+        Vector3f endPos = new Vector3f(10, 0, 0);
+
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         while (!glfwWindowShouldClose(window)) {
@@ -70,6 +72,9 @@ public class Main {
             p.update(window, delta);
 
             map.drawRoom(renderer);
+            if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+                map.currentRoom.isCleared = true;
+            }
 
 
             glfwPollEvents();

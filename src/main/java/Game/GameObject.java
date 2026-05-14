@@ -74,6 +74,8 @@ public class GameObject{
 
     public void setSize(float size){
         this.size = size;
+        this.sizeX = size;
+        this.sizeY = size;
     }
 
     public void setSizeX(float size){

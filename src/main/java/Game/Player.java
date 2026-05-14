@@ -8,7 +8,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Player extends GameObject {
     private float walkSpeed = 600f;
-    private float sizeX = 80f;
+    private float sizeX = 100f;
     private float sizeY = 100f;
 
     public Player() {

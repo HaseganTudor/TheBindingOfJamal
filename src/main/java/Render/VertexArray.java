@@ -46,6 +46,11 @@ public class VertexArray {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 
+    public void renderLines(){
+        bind();
+        glDrawElements(GL_LINES, 6, GL_UNSIGNED_INT, 0);
+    }
+
     public void bind() {
         glBindVertexArray(vao);
     }
