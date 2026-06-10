@@ -8,6 +8,8 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.Random;
 
+
+
 public class Map {
     int WindowWidth, WindowHeight, RoomsNumber;
     public ArrayList<Room> rooms = new ArrayList<>();
@@ -86,6 +88,7 @@ public class Map {
         currentRoom.resolveRoomCollisions(player);
         checkDoorCollision(currentRoom);
     }
+    
 
     public void checkDoorCollision(Room room){
         if(!room.isCleared) return;

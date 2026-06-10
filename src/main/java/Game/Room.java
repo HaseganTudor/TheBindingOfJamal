@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Enemy.Enemy;
 import Physics.BoxCollider;
 import Utils.Direction;
 import org.joml.Vector2i;
@@ -61,14 +62,11 @@ public class Room {
             wall.update();
         }
 
-        float r = isCleared ? 1.0f : 0.5f;
-        float g = isCleared ? 1.0f : 0.25f;
-        float b = 0.0f;
 
-        drawDoors(doorUp, renderer, r, g, b);
-        drawDoors(doorDown, renderer, r, g, b);
-        drawDoors(doorLeft, renderer, r, g, b);
-        drawDoors(doorRight, renderer, r, g, b);
+        drawDoors(doorUp, renderer);
+        drawDoors(doorDown, renderer);
+        drawDoors(doorLeft, renderer);
+        drawDoors(doorRight, renderer);
 
         for (Enemy enemy : enemies) {
             renderer.draw(enemy);
@@ -76,9 +74,14 @@ public class Room {
         }
     }
 
-    private void drawDoors(GameObject door, Renderer renderer, float r, float g, float b) {
+    private void drawDoors(GameObject door, Renderer renderer) {
         if (door == null) return;
-        door.setColor(r, g, b);
+        if(isCleared) {
+            door.setTexture("res/textures/door_open.png");
+        }
+        else{
+            door.setTexture("res/textures/door_closed.png");
+        }
         renderer.draw(door);
         door.update();
     }
@@ -162,10 +165,27 @@ public class Room {
         GameObject door = new GameObject();
         door.setSize(WallSize);
         switch (dir) {
-            case UP: door.position.set(0, top, 0); doorUp = door; break;
-            case DOWN: door.position.set(0, bottom, 0); doorDown = door; break;
-            case LEFT: door.position.set(left, 0, 0); doorLeft = door; break;
-            case RIGHT: door.position.set(right, 0, 0); doorRight = door; break;
+            case UP:
+                door.position.set(0, top, 0);
+                doorUp = door;
+                door.setRotationZ(180);
+                break;
+            case DOWN:
+                door.position.set(0, bottom, 0);
+                doorDown = door;
+                door.setRotationZ(0);
+                break;
+            case LEFT:
+                door.position.set(left, 0, 0);
+                doorLeft = door;
+                door.setRotationZ(-90);
+                break;
+            case RIGHT:
+                door.position.set(right, 0, 0);
+                doorRight = door;
+                door.setRotationZ(90);
+
+                break;
         }
     }
 

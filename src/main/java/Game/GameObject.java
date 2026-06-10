@@ -1,6 +1,7 @@
 package Game;
 
 import Render.Shader;
+import Render.SpriteSheet;
 import Render.Texture;
 import Render.VertexArray;
 import org.joml.Math;
@@ -8,17 +9,22 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 
-public class GameObject{
+public class GameObject extends Renderer{
     public Matrix4f modelMatrix;
     private VertexArray vertexArray;
     public Texture texture;
-    public Vector3f position = new Vector3f(0.0f, 0.0f, -1.0f);
+    public SpriteSheet spriteSheet;
+    public Vector3f position = new Vector3f(0.0f, 0.0f, 10.0f);
     public  float sizeX = 100f;
     public  float sizeY = 100f;
     public float size = 100f;
     public boolean isSolid = true;
     Vector3f color = new Vector3f(0.0f,0.0f,0.0f);
+    private final Vector3f colliderOffset = new Vector3f(0.0f, 0.0f, 0.0f);
+    private float colliderSizeX = -1.0f;
+    private float colliderSizeY = -1.0f;
     private float rotationZ = 0.0f;
+    private float rotationX = 0.0f;
 
     float[] vertices = {
             // x,    y,    z,     u,    v
@@ -49,7 +55,8 @@ public class GameObject{
         modelMatrix = new Matrix4f()
                 .translate(position)
                 .scale(sizeX, sizeY, 0.0f)
-                .rotateZ(Math.toRadians(rotationZ));
+                .rotateZ(Math.toRadians(rotationZ))
+                .rotateX(Math.toRadians(rotationX));
     }
 
     public void draw() {
@@ -107,7 +114,39 @@ public class GameObject{
         return sizeY / 2;
     }
 
+    public void setColliderSize(float width, float height) {
+        colliderSizeX = width;
+        colliderSizeY = height;
+    }
+
+    public void setColliderOffset(float x, float y) {
+        colliderOffset.set(x, y, 0.0f);
+    }
+
+    public Vector3f getColliderPosition() {
+        return new Vector3f(position).add(colliderOffset);
+    }
+
+    public float getColliderHalfSizeX() {
+        if (colliderSizeX > 0.0f) {
+            return colliderSizeX / 2.0f;
+        }
+
+        return getHalfSizeX();
+    }
+
+    public float getColliderHalfSizeY() {
+        if (colliderSizeY > 0.0f) {
+            return colliderSizeY / 2.0f;
+        }
+
+        return getHalfSizeY();
+    }
+
     public void setRotationZ(float Degrees){
         rotationZ = Degrees;
     }
+
+    public void setRotationX(float Degrees) { rotationX = Degrees; }
+
 }

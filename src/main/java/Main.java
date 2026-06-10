@@ -9,13 +9,15 @@ import java.util.ArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
 import static org.lwjgl.system.MemoryUtil.NULL;
+import java.awt.Frame;
 
 public class Main {
     private long window;
     private static int width = 1650;
     private static int height = 1050;
-    private String title = "titlu";
+    private String title = "The Bindig Of Jamal";
 
     private ArrayList<GameObject> gameObjectList = new ArrayList<>();
 
@@ -44,6 +46,9 @@ public class Main {
 
         GL.createCapabilities();
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     }
 
     private void loop() {
@@ -68,14 +73,14 @@ public class Main {
             double delta = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
-            renderer.draw(p);
             p.update(window, delta);
 
             map.drawRoom(renderer);
+            renderer.draw(p);
+
             if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
                 map.currentRoom.isCleared = true;
             }
-
 
             glfwPollEvents();
             glfwSwapBuffers(window);
@@ -97,8 +102,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
-
         new Main().run();
     }
 }

@@ -1,4 +1,5 @@
 #version 330 core
+
 out vec4 FragColor;
 
 in vec2 TexCoord;
@@ -9,10 +10,12 @@ uniform int hasTexture;
 
 void main()
 {
-    if(hasTexture == 1){
+    if (hasTexture == 1)
+    {
         FragColor = texture(uniTexture, TexCoord);
     }
-    else{
+    else
+    {
         FragColor = color;
     }
 }

@@ -1,9 +1,6 @@
-package Game;
+package Game.Enemy;
 
-import org.joml.Random;
-import org.joml.Vector3f;
-
-import java.util.ArrayList;
+import Game.GameObject;
 
 public class Enemy extends GameObject {
     float health;

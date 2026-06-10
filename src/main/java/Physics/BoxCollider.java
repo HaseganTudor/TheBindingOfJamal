@@ -10,29 +10,31 @@ public class BoxCollider {
     public static List<GameObject> colliders = new ArrayList<>();
 
     public static boolean isColliding(GameObject a, GameObject b) {
-        Vector3f pa = a.position;
-        Vector3f pb = b.position;
+        Vector3f pa = a.getColliderPosition();
+        Vector3f pb = b.getColliderPosition();
 
-        float aHalf = a.getHalfSize();
-        float bHalf = b.getHalfSize();
+        float aHalfX = a.getColliderHalfSizeX();
+        float aHalfY = a.getColliderHalfSizeY();
 
-        return Math.abs(pa.x - pb.x) < (aHalf + bHalf) &&
-                Math.abs(pa.y - pb.y) < (aHalf + bHalf);
+        float bHalfX = b.getColliderHalfSizeX();
+        float bHalfY = b.getColliderHalfSizeY();
+
+        return Math.abs(pa.x - pb.x) < (aHalfX + bHalfX) &&
+                Math.abs(pa.y - pb.y) < (aHalfY + bHalfY);
     }
 
     public static Vector3f getResolution(GameObject a, GameObject b) {
-
-        Vector3f pa = a.position;
-        Vector3f pb = b.position;
+        Vector3f pa = a.getColliderPosition();
+        Vector3f pb = b.getColliderPosition();
 
         float dx = pb.x - pa.x;
         float dy = pb.y - pa.y;
 
-        float aHalfX = a.getHalfSizeX();
-        float aHalfY = a.getHalfSizeY();
+        float aHalfX = a.getColliderHalfSizeX();
+        float aHalfY = a.getColliderHalfSizeY();
 
-        float bHalfX = b.getHalfSizeX();
-        float bHalfY = b.getHalfSizeY();
+        float bHalfX = b.getColliderHalfSizeX();
+        float bHalfY = b.getColliderHalfSizeY();
 
         float px = (aHalfX + bHalfX) - Math.abs(dx);
         float py = (aHalfY + bHalfY) - Math.abs(dy);
