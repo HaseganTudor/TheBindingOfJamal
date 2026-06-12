@@ -1,9 +1,10 @@
 package Game;
 
+import Game.Enemy.Enemy;
 import Render.Camera;
 import Render.Shader;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13C.glActiveTexture;
@@ -11,14 +12,14 @@ import static org.lwjgl.opengl.GL13C.glActiveTexture;
 public class Renderer {
     protected static Shader shader;
     protected static Camera camera;
+    private static final int MAX_LIGHTS = 12;
 
     public Renderer(int width, int height){
         shader = new Shader("res/shaders/vert.glsl", "res/shaders/frag.glsl");
         camera = new Camera(width, height, shader);
 
-        shader.setVec2f("lightPos", 0.0f, 0.0f);
-        shader.setVec3f("lightColor", 1.0f, 1.0f, 1.0f);
-        shader.setFloat("lightRadius", 300.0f);
+        shader.bind();
+        shader.setInt("lightCount", 0);
 
     }
 
@@ -66,6 +67,82 @@ public class Renderer {
         );
 
         object.draw();
+    }
+
+    public void setSceneLights(
+            boolean doorsEnabled,
+            GameObject doorUp,
+            GameObject doorDown,
+            GameObject doorLeft,
+            GameObject doorRight,
+            Player player,
+            List<Enemy> enemies
+    ) {
+        shader.bind();
+
+        int lightIndex = 0;
+
+        if (doorsEnabled) {
+            GameObject[] doors = { doorUp, doorDown, doorLeft, doorRight };
+
+            for (GameObject door : doors) {
+                if (door == null || lightIndex >= MAX_LIGHTS) {
+                    continue;
+                }
+
+                lightIndex = setLight(
+                        lightIndex,
+                        door.position.x,
+                        door.position.y,
+                        1.0f,
+                        0.78f,
+                        0.35f,
+                        250.0f,
+                        0.40f
+                );
+            }
+        }
+
+        if (player != null && lightIndex < MAX_LIGHTS) {
+            lightIndex = setLight(
+                    lightIndex,
+                    player.position.x,
+                    player.position.y,
+                    0.70f,
+                    0.88f,
+                    1.0f,
+                    50.0f,
+                    0.3f
+            );
+        }
+
+        for (Enemy enemy : enemies) {
+            if (lightIndex >= MAX_LIGHTS) {
+                break;
+            }
+
+            lightIndex = setLight(
+                    lightIndex,
+                    enemy.position.x,
+                    enemy.position.y,
+                    1.0f,
+                    0.25f,
+                    0.18f,
+                    100.0f,
+                    0.65f
+            );
+        }
+
+        shader.setInt("lightCount", lightIndex);
+    }
+
+    private int setLight(int index, float x, float y, float r, float g, float b, float radius, float intensity) {
+        shader.setVec2f("lights[" + index + "].position", x, y);
+        shader.setVec3f("lights[" + index + "].color", r, g, b);
+        shader.setFloat("lights[" + index + "].radius", radius);
+        shader.setFloat("lights[" + index + "].intensity", intensity);
+
+        return index + 1;
     }
 
 }

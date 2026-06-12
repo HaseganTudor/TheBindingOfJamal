@@ -1,4 +1,5 @@
 import Game.*;
+import Game.Enemy.Fly;
 import Physics.BoxCollider;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
@@ -63,6 +64,8 @@ public class Main {
         Vector3f currentPos = p.position;
         Vector3f endPos = new Vector3f(10, 0, 0);
 
+        ArrayList<Tear> tears = new ArrayList<>();
+
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         while (!glfwWindowShouldClose(window)) {
@@ -73,10 +76,11 @@ public class Main {
             double delta = currentFrame - lastFrame;
             lastFrame = currentFrame;
 
+            map.drawRoom(renderer);
+
+            renderer.draw(p);
             p.update(window, delta);
 
-            map.drawRoom(renderer);
-            renderer.draw(p);
 
             if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
                 map.currentRoom.isCleared = true;

@@ -1,6 +1,7 @@
 package Game;
 
 import Game.Enemy.Enemy;
+import Game.Enemy.Fly;
 import Physics.BoxCollider;
 import Utils.Direction;
 import org.joml.Vector2i;
@@ -36,6 +37,10 @@ public class Room {
         this.width = width;
         this.height = height;
 
+        Fly fly = new Fly();
+        fly.setRotationX(180f);
+        enemies.add(fly);
+
         left = -width / 2 + halfSize;
         right = width / 2 - halfSize;
         top = height / 2 - halfSize;
@@ -56,7 +61,9 @@ public class Room {
         }
     }
 
-    public void drawRoom(Renderer renderer) {
+    public void drawRoom(Renderer renderer, Player player) {
+        renderer.setSceneLights(isCleared, doorUp, doorDown, doorLeft, doorRight, player, enemies);
+
         for (GameObject wall : walls) {
             renderer.draw(wall);
             wall.update();
@@ -158,6 +165,15 @@ public class Room {
             wall2.position.x = right; wall2.position.y = i; wall2.setRotationZ(90); wall2.setSize(WallSize);
             walls.add(wall); walls.add(wall2);
             colliders.add(wall); colliders.add(wall2);
+        }
+
+        for(float i = left + WallSize; i < right; i += WallSize){
+            for(float j = top-WallSize; j > bottom; j -= WallSize){
+                GameObject floor = new GameObject();
+                floor.setColor(0.2f, 0.2f, 0.2f);
+                floor.position.x = i; floor.position.y = j; floor.setSize(WallSize);
+                walls.add(floor);
+            }
         }
     }
 

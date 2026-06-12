@@ -29,7 +29,8 @@ public class Player extends GameObject {
         Walk_Down.loadTexture("res/textures/player/player_walk_down.png");
         spriteSheet = new SpriteSheet(Idle,1, 2);
         spriteSheet.setFrameDuration(0.2f);
-        
+        Tear tear = new Tear();
+        tear.position.set(0, 0, 0);
         texture = Idle;
     }
 
@@ -37,6 +38,7 @@ public class Player extends GameObject {
     {
         boolean isMoving = PlayerMovement(window, delta);
         updateSprite(delta, isMoving);
+        shoot(window);
 
         modelMatrix.identity()
                 .translate(position)
@@ -69,6 +71,21 @@ public class Player extends GameObject {
         }
 
         return false;
+    }
+
+    public void shoot(long window){
+        if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+            Tear tear = new Tear();
+        }
+        if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
+            Tear tear = new Tear();
+        }
+        if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+            Tear tear = new Tear();
+        }
+        if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
+            Tear tear = new Tear();
+        }
     }
 
     private void updateSprite(double delta, boolean isMoving) {

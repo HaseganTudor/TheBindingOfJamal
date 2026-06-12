@@ -84,7 +84,7 @@ public class Map {
 
     public void drawRoom(Renderer renderer){
         currentRoom.updateStatus();
-        currentRoom.drawRoom(renderer);
+        currentRoom.drawRoom(renderer, player);
         currentRoom.resolveRoomCollisions(player);
         checkDoorCollision(currentRoom);
     }
