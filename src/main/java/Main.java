@@ -30,6 +30,7 @@ public class Main {
     };
 
     private void init() {
+        glfwInitHint(GLFW_PLATFORM,GLFW_PLATFORM_X11);
         if (!glfwInit()) {
             System.out.println("nu s-a putut initializa GLFW");
             return;
@@ -65,7 +66,6 @@ public class Main {
         Vector3f endPos = new Vector3f(10, 0, 0);
 
         ArrayList<Tear> tears = new ArrayList<>();
-
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         while (!glfwWindowShouldClose(window)) {
