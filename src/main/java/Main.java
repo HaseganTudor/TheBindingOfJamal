@@ -56,7 +56,7 @@ public class Main {
 
         Renderer renderer = new Renderer(width, height);
 
-        Player p = new Player();
+        Player p = new Player(renderer);
         p.setColor(1, 1, 1);
 
         double lastFrame = glfwGetTime();

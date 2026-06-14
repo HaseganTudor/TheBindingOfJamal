@@ -4,6 +4,7 @@ import Game.Enemy.Enemy;
 import Render.Camera;
 import Render.Shader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL13C.GL_TEXTURE0;
@@ -76,7 +77,8 @@ public class Renderer {
             GameObject doorLeft,
             GameObject doorRight,
             Player player,
-            List<Enemy> enemies
+            List<Enemy> enemies,
+            ArrayList<Projectile> projectiles
     ) {
         shader.bind();
 
@@ -125,11 +127,27 @@ public class Renderer {
                     lightIndex,
                     enemy.position.x,
                     enemy.position.y,
-                    1.0f,
-                    0.25f,
-                    0.18f,
+                    enemy.rgb.x,
+                    enemy.rgb.y,
+                    enemy.rgb.z,
                     100.0f,
                     0.65f
+            );
+        }
+
+        for(Projectile projectile : projectiles) {
+            if (lightIndex >= MAX_LIGHTS) {
+                break;
+            }
+            lightIndex = setLight(
+                    lightIndex,
+                    projectile.position.x,
+                    projectile.position.y,
+                    0.70f,
+                    0.88f,
+                    1.0f,
+                    50.0f,
+                    0.5f
             );
         }
 

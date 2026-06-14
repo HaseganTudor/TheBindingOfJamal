@@ -9,7 +9,7 @@ uniform vec4 color;
 uniform sampler2D uniTexture;
 uniform int hasTexture;
 
-const int MAX_LIGHTS = 12;
+const int MAX_LIGHTS = 32;
 
 struct PointLight {
     vec2 position;

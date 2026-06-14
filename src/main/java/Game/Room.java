@@ -1,6 +1,7 @@
 package Game;
 
 import Game.Enemy.Enemy;
+import Game.Enemy.EnemyFactory;
 import Game.Enemy.Fly;
 import Physics.BoxCollider;
 import Utils.Direction;
@@ -37,10 +38,6 @@ public class Room {
         this.width = width;
         this.height = height;
 
-        Fly fly = new Fly();
-        fly.setRotationX(180f);
-        enemies.add(fly);
-
         left = -width / 2 + halfSize;
         right = width / 2 - halfSize;
         top = height / 2 - halfSize;
@@ -62,7 +59,9 @@ public class Room {
     }
 
     public void drawRoom(Renderer renderer, Player player) {
-        renderer.setSceneLights(isCleared, doorUp, doorDown, doorLeft, doorRight, player, enemies);
+        renderer.setSceneLights(isCleared, doorUp, doorDown, doorLeft, doorRight, player, enemies, player.projectiles);
+
+        ArrayList<Projectile> projectiles = player.projectiles;
 
         for (GameObject wall : walls) {
             renderer.draw(wall);
@@ -79,6 +78,12 @@ public class Room {
             renderer.draw(enemy);
             enemy.update();
         }
+
+        for(Projectile projectile : projectiles){
+            projectile.update();
+            renderer.draw(projectile);
+        }
+
     }
 
     private void drawDoors(GameObject door, Renderer renderer) {
@@ -99,11 +104,10 @@ public class Room {
         ArrayList<Vector3f> availablePositions = new ArrayList<>(enemyPositions);
         Collections.shuffle(availablePositions);
 
-        for (int i = 0; i < enemyNumber; i++) {
-            Enemy enemy = new Enemy();
-            enemy.position = new Vector3f(availablePositions.get(i));
-            enemy.setColor(1, 0, 0);
-            enemies.add(enemy);
+        for(int i = 0; i < enemyNumber; i++) {
+            enemies.add(EnemyFactory.createRandomEnemy());
+            enemies.get(i).position.set(availablePositions.get(i));
+            enemies.get(i).setRotationX(180);
         }
     }
 

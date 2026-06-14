@@ -1,14 +1,17 @@
 package Game;
 
 import Render.Texture;
+import Utils.Direction;
 
 public class Projectile extends GameObject {
     float damage;
     float speed;
-    float maxTravel;
+    public float lifeTime;
+    Direction direction;
     public Projectile(){
-        speed = 100;
+        speed = 600;
         damage = 1;
-        maxTravel = 500.0f;
+        lifeTime = 1.0f;
+        direction = Direction.NONE;
     }
 }
