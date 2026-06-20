@@ -1,20 +1,19 @@
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 import Game.*;
 import Game.Enemy.Fly;
+import Game.Renderer;
 import Physics.BoxCollider;
+import java.util.ArrayList;
+import javax.swing.*;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL;
 
-import java.awt.*;
-import java.util.ArrayList;
-
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import java.awt.Frame;
-
 public class Main {
+
     private long window;
     private static int width = 1650;
     private static int height = 1050;
@@ -22,18 +21,17 @@ public class Main {
 
     private ArrayList<GameObject> gameObjectList = new ArrayList<>();
 
-    private static GLFWFramebufferSizeCallback resizeWindow = new GLFWFramebufferSizeCallback(){
-        @Override
-        public void invoke(long window, int width, int height){
-            glViewport(0,0,width,width * 9 / 16);
-        }
-    };
+    private static GLFWFramebufferSizeCallback resizeWindow =
+        new GLFWFramebufferSizeCallback() {
+            @Override
+            public void invoke(long window, int width, int height) {
+                glViewport(0, 0, width, (width * 9) / 16);
+            }
+        };
 
     private void init() {
-        glfwInitHint(GLFW_PLATFORM,GLFW_PLATFORM_X11);
         if (!glfwInit()) {
-            System.out.println("nu s-a putut initializa GLFW");
-            return;
+            throw new IllegalStateException("Nu s-a putut initializa GLFW");
         }
 
         glfwDefaultWindowHints();
@@ -41,6 +39,10 @@ public class Main {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
         window = glfwCreateWindow(width, height, title, NULL, NULL);
+        if (window == NULL) {
+            glfwTerminate();
+            throw new IllegalStateException("Nu s-a putut crea fereastra GLFW");
+        }
 
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
@@ -50,18 +52,16 @@ public class Main {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     }
 
     private void loop() {
-
         Renderer renderer = new Renderer(width, height);
 
         Player p = new Player(renderer);
         p.setColor(1, 1, 1);
 
         double lastFrame = glfwGetTime();
-        Map map =  new Map(p,width, height, 10, renderer);
+        Map map = new Map(p, width, height, 10, renderer);
         Vector3f currentPos = p.position;
         Vector3f endPos = new Vector3f(10, 0, 0);
 
@@ -69,7 +69,6 @@ public class Main {
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
         while (!glfwWindowShouldClose(window)) {
-
             glClear(GL_COLOR_BUFFER_BIT);
 
             double currentFrame = glfwGetTime();
@@ -81,8 +80,7 @@ public class Main {
             renderer.draw(p);
             p.update(window, delta);
 
-
-            if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
                 map.currentRoom.isCleared = true;
             }
 
@@ -93,8 +91,8 @@ public class Main {
         glfwTerminate();
     }
 
-    private void DrawGameObjects(Renderer renderer){
-        for(GameObject obj : gameObjectList){
+    private void DrawGameObjects(Renderer renderer) {
+        for (GameObject obj : gameObjectList) {
             renderer.draw(obj);
             obj.update();
         }

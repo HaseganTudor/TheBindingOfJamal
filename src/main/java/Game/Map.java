@@ -64,6 +64,7 @@ public class Map {
         }
     }
 
+
     public void generateDoors(Room currentRoom){
         if(RoomExists(new Vector2i(currentRoom.position.x - 1, currentRoom.position.y))) currentRoom.putDoor(Direction.LEFT);
         else currentRoom.putWall(Direction.LEFT);
