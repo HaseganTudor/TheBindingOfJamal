@@ -80,10 +80,6 @@ public class Main {
             renderer.draw(p);
             p.update(window, delta);
 
-            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-                map.currentRoom.isCleared = true;
-            }
-
             glfwPollEvents();
             glfwSwapBuffers(window);
         }

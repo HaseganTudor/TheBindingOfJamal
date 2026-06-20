@@ -5,12 +5,11 @@ import Game.Enemy.EnemyFactory;
 import Game.Enemy.Fly;
 import Physics.BoxCollider;
 import Utils.Direction;
-import org.joml.Vector2i;
-import org.joml.Vector3f;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import org.joml.Vector2i;
+import org.joml.Vector3f;
 
 public class Room {
 
@@ -59,7 +58,16 @@ public class Room {
     }
 
     public void drawRoom(Renderer renderer, Player player) {
-        renderer.setSceneLights(isCleared, doorUp, doorDown, doorLeft, doorRight, player, enemies, player.projectiles);
+        renderer.setSceneLights(
+            isCleared,
+            doorUp,
+            doorDown,
+            doorLeft,
+            doorRight,
+            player,
+            enemies,
+            player.projectiles
+        );
 
         ArrayList<Projectile> projectiles = player.projectiles;
 
@@ -67,7 +75,6 @@ public class Room {
             renderer.draw(wall);
             wall.update();
         }
-
 
         drawDoors(doorUp, renderer);
         drawDoors(doorDown, renderer);
@@ -79,19 +86,36 @@ public class Room {
             enemy.update();
         }
 
-        for(Projectile projectile : projectiles){
+        for (Projectile projectile : projectiles) {
             projectile.update();
             renderer.draw(projectile);
         }
 
+        for (int i = projectiles.size() - 1; i >= 0; i--) {
+            Projectile projectile = projectiles.get(i);
+
+            for (int j = enemies.size() - 1; j >= 0; j--) {
+                Enemy enemy = enemies.get(j);
+
+                if (BoxCollider.isColliding(projectile, enemy)) {
+                    enemy.health -= projectile.damage;
+                    projectiles.remove(i);
+
+                    if (enemy.health <= 0) {
+                        enemies.remove(j);
+                    }
+
+                    break;
+                }
+            }
+        }
     }
 
     private void drawDoors(GameObject door, Renderer renderer) {
         if (door == null) return;
-        if(isCleared) {
+        if (isCleared) {
             door.setTexture("res/textures/door_open.png");
-        }
-        else{
+        } else {
             door.setTexture("res/textures/door_closed.png");
         }
         renderer.draw(door);
@@ -101,10 +125,12 @@ public class Room {
     public void CreateEnemies() {
         Random rand = new Random();
         int enemyNumber = rand.nextInt(enemyPositions.size() - 2) + 2;
-        ArrayList<Vector3f> availablePositions = new ArrayList<>(enemyPositions);
+        ArrayList<Vector3f> availablePositions = new ArrayList<>(
+            enemyPositions
+        );
         Collections.shuffle(availablePositions);
 
-        for(int i = 0; i < enemyNumber; i++) {
+        for (int i = 0; i < enemyNumber; i++) {
             enemies.add(EnemyFactory.createRandomEnemy());
             enemies.get(i).position.set(availablePositions.get(i));
             enemies.get(i).setRotationX(180);
@@ -147,16 +173,24 @@ public class Room {
         walls.add(cornerLeftDOWN);
         walls.add(cornerRightDOWW);
 
-        for (float i = left+WallSize; i < right; i += WallSize) {
+        for (float i = left + WallSize; i < right; i += WallSize) {
             if (i == 0) continue;
             GameObject wall = new GameObject();
             GameObject wall2 = new GameObject();
             wall.setTexture("res/textures/wall.png");
-            wall.position.x = i; wall.position.y = top; wall.setRotationZ(180); wall.setSize(WallSize);
+            wall.position.x = i;
+            wall.position.y = top;
+            wall.setRotationZ(180);
+            wall.setSize(WallSize);
             wall2.setTexture("res/textures/wall.png");
-            wall2.position.x = i; wall2.position.y = bottom; wall2.setRotationZ(0); wall2.setSize(WallSize);
-            walls.add(wall); walls.add(wall2);
-            colliders.add(wall); colliders.add(wall2);
+            wall2.position.x = i;
+            wall2.position.y = bottom;
+            wall2.setRotationZ(0);
+            wall2.setSize(WallSize);
+            walls.add(wall);
+            walls.add(wall2);
+            colliders.add(wall);
+            colliders.add(wall2);
         }
 
         for (float i = top - WallSize; i > bottom; i -= WallSize) {
@@ -164,18 +198,28 @@ public class Room {
             GameObject wall = new GameObject();
             GameObject wall2 = new GameObject();
             wall.setTexture("res/textures/wall.png");
-            wall.position.x = left; wall.position.y = i; wall.setRotationZ(-90); wall.setSize(WallSize);
+            wall.position.x = left;
+            wall.position.y = i;
+            wall.setRotationZ(-90);
+            wall.setSize(WallSize);
             wall2.setTexture("res/textures/wall.png");
-            wall2.position.x = right; wall2.position.y = i; wall2.setRotationZ(90); wall2.setSize(WallSize);
-            walls.add(wall); walls.add(wall2);
-            colliders.add(wall); colliders.add(wall2);
+            wall2.position.x = right;
+            wall2.position.y = i;
+            wall2.setRotationZ(90);
+            wall2.setSize(WallSize);
+            walls.add(wall);
+            walls.add(wall2);
+            colliders.add(wall);
+            colliders.add(wall2);
         }
 
-        for(float i = left + WallSize; i < right; i += WallSize){
-            for(float j = top-WallSize; j > bottom; j -= WallSize){
+        for (float i = left + WallSize; i < right; i += WallSize) {
+            for (float j = top - WallSize; j > bottom; j -= WallSize) {
                 GameObject floor = new GameObject();
                 floor.setColor(0.2f, 0.2f, 0.2f);
-                floor.position.x = i; floor.position.y = j; floor.setSize(WallSize);
+                floor.position.x = i;
+                floor.position.y = j;
+                floor.setSize(WallSize);
                 walls.add(floor);
             }
         }
@@ -214,29 +258,43 @@ public class Room {
         wall.setTexture("res/textures/wall.png");
         wall.setSize(WallSize);
         switch (dir) {
-            case UP: wall.position.set(0, top, 0); wall.setRotationZ(180); break;
-            case DOWN: wall.position.set(0, bottom, 0); wall.setRotationZ(0); break;
-            case LEFT: wall.position.set(left, 0, 0); wall.setRotationZ(-90); break;
-            case RIGHT: wall.position.set(right, 0, 0); wall.setRotationZ(90); break;
+            case UP:
+                wall.position.set(0, top, 0);
+                wall.setRotationZ(180);
+                break;
+            case DOWN:
+                wall.position.set(0, bottom, 0);
+                wall.setRotationZ(0);
+                break;
+            case LEFT:
+                wall.position.set(left, 0, 0);
+                wall.setRotationZ(-90);
+                break;
+            case RIGHT:
+                wall.position.set(right, 0, 0);
+                wall.setRotationZ(90);
+                break;
         }
         walls.add(wall);
         colliders.add(wall);
     }
 
-    public void resolveRoomCollisions(GameObject gameObject){
-        for(GameObject collider : colliders){
-            gameObject.position.add(BoxCollider.getResolution(gameObject, collider));
+    public void resolveRoomCollisions(GameObject gameObject) {
+        for (GameObject collider : colliders) {
+            gameObject.position.add(
+                BoxCollider.getResolution(gameObject, collider)
+            );
         }
         if (!isCleared) {
-            if(doorUp != null) checkDoorSolid(gameObject, doorUp);
-            if(doorDown != null) checkDoorSolid(gameObject, doorDown);
-            if(doorLeft != null) checkDoorSolid(gameObject, doorLeft);
-            if(doorRight != null) checkDoorSolid(gameObject, doorRight);
+            if (doorUp != null) checkDoorSolid(gameObject, doorUp);
+            if (doorDown != null) checkDoorSolid(gameObject, doorDown);
+            if (doorLeft != null) checkDoorSolid(gameObject, doorLeft);
+            if (doorRight != null) checkDoorSolid(gameObject, doorRight);
         }
     }
 
     private void checkDoorSolid(GameObject player, GameObject door) {
-        if(door == null) return;
+        if (door == null) return;
         player.position.add(BoxCollider.getResolution(player, door));
     }
 }
